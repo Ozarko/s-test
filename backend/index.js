@@ -23,21 +23,23 @@ const app = express();
 
 const FRONTEND_URL_API = process.env.FRONTEND_URL_API;
 const PORT = process.env.PORT || 4000;
-
+const PROD_MODE = process.env.NODE_ENV === "production";
 // Підключення до бази даних
 connectDB().catch(err => {
   console.error("Failed to connect to database, exiting...");
   process.exit(1); // Завершення процесу в разі невдачі
 });
 
-// Middleware
-app.use(
-  cors({
-    origin: FRONTEND_URL_API,
-  })
-);
+
+if (PROD_MODE) {
+  app.use(
+    cors({
+      origin: FRONTEND_URL_API,
+    })
+  );
+}
+
 app.use(express.json());
-// app.use(middleware.decodeToken);
 
 // Маршрут для API
 
@@ -67,11 +69,6 @@ const expressServer = app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-const io = new Server(expressServer, {
-  cors: {
-    origin: `${FRONTEND_URL_API}`,
-    methods: ["GET", "POST"],
-  },
-});
+const io = new Server(expressServer);
 
 chatSocket(io);
