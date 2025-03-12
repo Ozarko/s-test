@@ -1,5 +1,7 @@
 import admin from "firebase-admin";
+import dotenv from "dotenv";
 
+dotenv.config();
 const serviceAccount = {
   type: "service_account",
   project_id: process.env.FIREBASE_PROJECT_ID,
@@ -14,7 +16,7 @@ const serviceAccount = {
   universe_domain: "googleapis.com",
 };
 
-
+console.log(serviceAccount);
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
