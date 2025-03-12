@@ -65,10 +65,6 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
 });
 
-const expressServer = app.listen(PORT, () => {
+app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
-
-const io = new Server(expressServer);
-
-chatSocket(io);
